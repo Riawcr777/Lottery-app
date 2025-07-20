@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>คีย์หวย FINAL V8</title>
+  <title>คีย์หวย FINAL V10</title>
   <link rel="stylesheet" href="style.css" />
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
@@ -12,18 +12,23 @@
 <body>
 
 <div id="app-page">
-  <h2>คีย์หวย (FINAL V8 - ไม่มีล็อกอิน)</h2>
+  <h2>คีย์หวย (FINAL V10 - ใช้งานบน GitHub ได้)</h2>
   <button onclick="clearInput()">Clear Input</button>
   <button onclick="resetAll()">🧹 ล้างข้อมูลทั้งหมด</button>
 
   <form id="lottery-form">
     <table>
       <tr><th>เลข</th><th>บน</th><th>ล่าง</th><th>โต๊ด</th><th>กลับ</th><th>6ประตู</th></tr>
-      <script>
-        for(let i=0;i<10;i++){
-          document.write("<tr><td><input type='text' class='number' maxlength='3'></td><td><input type='number' class='top'></td><td><input type='number' class='bottom'></td><td><input type='number' class='tod'></td><td><button type='button' onclick='reverseRow(this)'>กลับ</button></td><td><button type='button' onclick='reverse6Way(this)'>6ประตู</button></td></tr>");
-        }
-      </script>
+<tr><td><input type='text' class='number' maxlength='3'></td><td><input type='number' class='top'></td><td><input type='number' class='bottom'></td><td><input type='number' class='tod'></td><td><button type='button' onclick='reverseRow(this)'>กลับ</button></td><td><button type='button' onclick='reverse6Way(this)'>6ประตู</button></td></tr>
+<tr><td><input type='text' class='number' maxlength='3'></td><td><input type='number' class='top'></td><td><input type='number' class='bottom'></td><td><input type='number' class='tod'></td><td><button type='button' onclick='reverseRow(this)'>กลับ</button></td><td><button type='button' onclick='reverse6Way(this)'>6ประตู</button></td></tr>
+<tr><td><input type='text' class='number' maxlength='3'></td><td><input type='number' class='top'></td><td><input type='number' class='bottom'></td><td><input type='number' class='tod'></td><td><button type='button' onclick='reverseRow(this)'>กลับ</button></td><td><button type='button' onclick='reverse6Way(this)'>6ประตู</button></td></tr>
+<tr><td><input type='text' class='number' maxlength='3'></td><td><input type='number' class='top'></td><td><input type='number' class='bottom'></td><td><input type='number' class='tod'></td><td><button type='button' onclick='reverseRow(this)'>กลับ</button></td><td><button type='button' onclick='reverse6Way(this)'>6ประตู</button></td></tr>
+<tr><td><input type='text' class='number' maxlength='3'></td><td><input type='number' class='top'></td><td><input type='number' class='bottom'></td><td><input type='number' class='tod'></td><td><button type='button' onclick='reverseRow(this)'>กลับ</button></td><td><button type='button' onclick='reverse6Way(this)'>6ประตู</button></td></tr>
+<tr><td><input type='text' class='number' maxlength='3'></td><td><input type='number' class='top'></td><td><input type='number' class='bottom'></td><td><input type='number' class='tod'></td><td><button type='button' onclick='reverseRow(this)'>กลับ</button></td><td><button type='button' onclick='reverse6Way(this)'>6ประตู</button></td></tr>
+<tr><td><input type='text' class='number' maxlength='3'></td><td><input type='number' class='top'></td><td><input type='number' class='bottom'></td><td><input type='number' class='tod'></td><td><button type='button' onclick='reverseRow(this)'>กลับ</button></td><td><button type='button' onclick='reverse6Way(this)'>6ประตู</button></td></tr>
+<tr><td><input type='text' class='number' maxlength='3'></td><td><input type='number' class='top'></td><td><input type='number' class='bottom'></td><td><input type='number' class='tod'></td><td><button type='button' onclick='reverseRow(this)'>กลับ</button></td><td><button type='button' onclick='reverse6Way(this)'>6ประตู</button></td></tr>
+<tr><td><input type='text' class='number' maxlength='3'></td><td><input type='number' class='top'></td><td><input type='number' class='bottom'></td><td><input type='number' class='tod'></td><td><button type='button' onclick='reverseRow(this)'>กลับ</button></td><td><button type='button' onclick='reverse6Way(this)'>6ประตู</button></td></tr>
+<tr><td><input type='text' class='number' maxlength='3'></td><td><input type='number' class='top'></td><td><input type='number' class='bottom'></td><td><input type='number' class='tod'></td><td><button type='button' onclick='reverseRow(this)'>กลับ</button></td><td><button type='button' onclick='reverse6Way(this)'>6ประตู</button></td></tr>
     </table>
     <button type="submit">บันทึกทั้งหมด</button>
     <button type="button" onclick="startVoice()">🎤 สั่งงานด้วยเสียง</button>

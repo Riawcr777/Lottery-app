@@ -149,12 +149,20 @@ function displaySummary(summary){
 
 
 
+
 function exportExcel(){
   const data = JSON.parse(localStorage.getItem("lottery_summary")||"{}");
   const now = new Date().toLocaleString().replace(/[/,: ]/g,"_");
 
-  const entries = Object.entries(data).sort((a, b) => parseInt(a[0]) - parseInt(b[0]));
-  const rows = entries.map(([k, v]) => ({เลข: k, บน: v.top, ล่าง: v.bottom, โต๊ด: v.tod}));
+  const data2 = [];
+  const data3 = [];
+  for (const [num, val] of Object.entries(data)) {
+    if (num.length === 2) data2.push([num, val]);
+    else if (num.length === 3) data3.push([num, val]);
+  }
+  data2.sort((a, b) => parseInt(a[0]) - parseInt(b[0]));
+  data3.sort((a, b) => parseInt(a[0]) - parseInt(b[0]));
+  const rows = [...data2, ...data3].map(([k,v]) => ({เลข:k, บน:v.top, ล่าง:v.bottom, โต๊ด:v.tod}));
 
   const ws = XLSX.utils.json_to_sheet(rows);
   const wb = XLSX.utils.book_new();
@@ -163,15 +171,35 @@ function exportExcel(){
 }
 
 
+
 function exportCSV(){
   const data = JSON.parse(localStorage.getItem("lottery_summary")||"{}");
   const now = new Date().toLocaleString().replace(/[/,: ]/g,"_");
 
-  const entries = Object.entries(data).sort((a, b) => parseInt(a[0]) - parseInt(b[0]));
+  const data2 = [];
+  const data3 = [];
+  for (const [num, val] of Object.entries(data)) {
+    if (num.length === 2) data2.push([num, val]);
+    else if (num.length === 3) data3.push([num, val]);
+  }
+  data2.sort((a, b) => parseInt(a[0]) - parseInt(b[0]));
+  data3.sort((a, b) => parseInt(a[0]) - parseInt(b[0]));
+  const entries = [...data2, ...data3];
+
   let csv = "เลข,บน,ล่าง,โต๊ด
 ";
   for(const [num, amt] of entries){
     csv += `${num},${amt.top},${amt.bottom},${amt.tod}
+`;
+  }
+
+  const blob = new Blob([csv], {type:"text/csv;charset=utf-8;"});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = `lottery_summary_${now}.csv`;
+  a.click();
+}
 `;
   }
 

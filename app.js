@@ -107,93 +107,81 @@ function saveBill(){
   drawChart(totalTop, totalBottom, totalTod);
 }
 
+
 function displaySummary(summary){
   const summary2 = [];
   const summary3 = [];
+  let total2Top = 0, total2Bottom = 0, total2Tod = 0;
+  let total3Top = 0, total3Bottom = 0, total3Tod = 0;
+
   for(const [num, amt] of Object.entries(summary)){
-    if(num.length === 2) summary2.push([num, amt]);
-    else if(num.length === 3) summary3.push([num, amt]);
+    if(num.length === 2) {
+      summary2.push([num, amt]);
+      total2Top += amt.top;
+      total2Bottom += amt.bottom;
+      total2Tod += amt.tod;
+    }
+    else if(num.length === 3) {
+      summary3.push([num, amt]);
+      total3Top += amt.top;
+      total3Bottom += amt.bottom;
+      total3Tod += amt.tod;
+    }
   }
   summary2.sort((a,b)=>parseInt(a[0]) - parseInt(b[0]));
   summary3.sort((a,b)=>parseInt(a[0]) - parseInt(b[0]));
+
   let html2 = "<table><tr><th>เลข</th><th>บน</th><th>ล่าง</th><th>โต๊ด</th></tr>";
   for(const [num, amt] of summary2){
     html2 += `<tr><td>${num}</td><td>${amt.top}</td><td>${amt.bottom}</td><td>${amt.tod}</td></tr>`;
   }
-  html2 += "</table>";
+  html2 += `<tr><td><b>รวม</b></td><td><b>${total2Top}</b></td><td><b>${total2Bottom}</b></td><td><b>${total2Tod}</b></td></tr></table>`;
+
   let html3 = "<table><tr><th>เลข</th><th>บน</th><th>ล่าง</th><th>โต๊ด</th></tr>";
   for(const [num, amt] of summary3){
     html3 += `<tr><td>${num}</td><td>${amt.top}</td><td>${amt.bottom}</td><td>${amt.tod}</td></tr>`;
   }
-  html3 += "</table>";
+  html3 += `<tr><td><b>รวม</b></td><td><b>${total3Top}</b></td><td><b>${total3Bottom}</b></td><td><b>${total3Tod}</b></td></tr></table>`;
+
   document.getElementById("summary2").innerHTML = html2;
   document.getElementById("summary3").innerHTML = html3;
 }
 
-function drawChart(top, bottom, tod){
-  const ctx = document.getElementById('summaryChart').getContext('2d');
-  if(window.summaryChart) window.summaryChart.destroy();
-  window.summaryChart = new Chart(ctx, {
-    type: 'bar',
-    data: {
-      labels: ['บน', 'ล่าง', 'โต๊ด'],
-      datasets: [{
-        label: 'ยอดรวม (บาท)',
-        data: [top, bottom, tod]
-      }]
-    }
-  });
-}
 
-function cutBill(){
-  saveBill();
-  const summary = JSON.parse(localStorage.getItem("lottery_summary")||"{}");
-  const history = JSON.parse(localStorage.getItem("lottery_history")||"[]");
-  history.push({date: new Date().toLocaleString(), data: summary});
-  localStorage.setItem("lottery_history", JSON.stringify(history));
-  // localStorage.removeItem("lottery_summary");
-  document.getElementById("summary2").innerHTML = "";
-  document.getElementById("summary3").innerHTML = "";
-  document.getElementById("total").innerHTML = "";
-  loadHistory();
-}
-
-function loadHistory(){
-  const history = JSON.parse(localStorage.getItem("lottery_history")||"[]");
-  let html = "";
-  for(const h of history){
-    html += `<div><b>${h.date}</b><table><tr><th>เลข</th><th>บน</th><th>ล่าง</th><th>โต๊ด</th></tr>`;
-    for(const [num,amt] of Object.entries(h.data)){
-      html += `<tr><td>${num}</td><td>${amt.top}</td><td>${amt.bottom}</td><td>${amt.tod}</td></tr>`;
-    }
-    html += "</table></div><hr>";
-  }
-  document.getElementById("history").innerHTML = html;
-}
-
-function resetAll(){
-  if(confirm("ยืนยันล้างข้อมูลทั้งหมด?")){
-    localStorage.clear();
-    location.reload();
-  }
-}
 
 function exportExcel(){
   const data = JSON.parse(localStorage.getItem("lottery_summary")||"{}");
   const now = new Date().toLocaleString().replace(/[/,: ]/g,"_");
-  const ws = XLSX.utils.json_to_sheet(Object.keys(data).map(k=>({เลข:k,บน:data[k].top,ล่าง:data[k].bottom,โต๊ด:data[k].tod})));
+
+  const entries = Object.entries(data).sort((a, b) => parseInt(a[0]) - parseInt(b[0]));
+  const rows = entries.map(([k, v]) => ({เลข: k, บน: v.top, ล่าง: v.bottom, โต๊ด: v.tod}));
+
+  const ws = XLSX.utils.json_to_sheet(rows);
   const wb = XLSX.utils.book_new();
   XLSX.utils.book_append_sheet(wb, ws, "Summary");
   XLSX.writeFile(wb, `lottery_summary_${now}.xlsx`);
 }
 
+
 function exportCSV(){
   const data = JSON.parse(localStorage.getItem("lottery_summary")||"{}");
   const now = new Date().toLocaleString().replace(/[/,: ]/g,"_");
-  let csv = "เลข,บน,ล่าง,โต๊ด\n";
-  for(const [num,amt] of Object.entries(data)){
-    csv += `${num},${amt.top},${amt.bottom},${amt.tod}\n`;
+
+  const entries = Object.entries(data).sort((a, b) => parseInt(a[0]) - parseInt(b[0]));
+  let csv = "เลข,บน,ล่าง,โต๊ด
+";
+  for(const [num, amt] of entries){
+    csv += `${num},${amt.top},${amt.bottom},${amt.tod}
+`;
   }
+
+  const blob = new Blob([csv], {type:"text/csv;charset=utf-8;"});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = `lottery_summary_${now}.csv`;
+  a.click();
+}
   const blob = new Blob([csv], {type:"text/csv;charset=utf-8;"});
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");

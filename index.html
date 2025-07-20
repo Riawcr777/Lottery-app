@@ -1,0 +1,58 @@
+
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>คีย์หวย FINAL V7</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+</head>
+<body>
+
+<div id="login-page">
+  <h2>เข้าสู่ระบบ</h2>
+  <input type="text" id="username" placeholder="Username" />
+  <input type="password" id="password" placeholder="Password" />
+  <button onclick="login()">Login</button>
+</div>
+
+<div id="app-page" style="display:none;">
+  <h2>คีย์หวย (FINAL V7)</h2>
+  <p>👤 User: <span id="current-user"></span></p>
+  <button onclick="logout()">Logout</button>
+  <button onclick="clearInput()">Clear Input</button>
+  <button onclick="resetAll()">🧹 ล้างข้อมูลทั้งหมด</button>
+
+  <form id="lottery-form">
+    <table>
+      <tr><th>เลข</th><th>บน</th><th>ล่าง</th><th>โต๊ด</th><th>กลับ</th><th>6ประตู</th></tr>
+      <script>
+        for(let i=0;i<10;i++){
+          document.write("<tr><td><input type='text' class='number' maxlength='3'></td><td><input type='number' class='top'></td><td><input type='number' class='bottom'></td><td><input type='number' class='tod'></td><td><button type='button' onclick='reverseRow(this)'>กลับ</button></td><td><button type='button' onclick='reverse6Way(this)'>6ประตู</button></td></tr>");
+        }
+      </script>
+    </table>
+    <button type="submit">บันทึกทั้งหมด</button>
+    <button type="button" onclick="startVoice()">🎤 สั่งงานด้วยเสียง</button>
+  </form>
+
+  <h3>สรุปยอดเลขรวม (เลข 2 ตัว)</h3>
+  <div id="summary2"></div>
+
+  <h3>สรุปยอดเลขรวม (เลข 3 ตัว)</h3>
+  <div id="summary3"></div>
+
+  <h3>ยอดรวมทั้งหมด</h3>
+  <div id="total"></div>
+
+  <canvas id="chart" width="600" height="300"></canvas>
+
+  <button onclick="exportExcel()">📤 ส่งออก Excel</button>
+  <button onclick="exportCSV()">📤 ส่งออก CSV</button>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>

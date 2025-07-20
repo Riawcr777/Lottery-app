@@ -85,8 +85,7 @@ function saveBill(){
       tops[i].value = "";
       bottoms[i].value = "";
       tods[i].value = "";
-      numbers[i].disabled = true;
-      numbers[i].style.backgroundColor = "#eee";
+      numbers[i].style.backgroundColor = "";
     }
   }
   localStorage.setItem("lottery_summary", JSON.stringify(summary));

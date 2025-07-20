@@ -16,6 +16,7 @@ for (let i = 0; i < 10; i++) {
   cell5.innerHTML = "<button type='button' onclick='reverseRow(this)'>กลับเลข</button>";
 }
 
+
 function reverseRow(btn){
   const row = btn.parentElement.parentElement;
   const numberInput = row.querySelector(".number");
@@ -28,14 +29,7 @@ function reverseRow(btn){
   if(number.length === 2){
     reversedNumbers = [number.split("").reverse().join("")];
   } else if(number.length === 3){
-    let perms = new Set();
-    const digits = number.split("");
-    for (let i = 0; i < 3; i++)
-      for (let j = 0; j < 3; j++)
-        for (let k = 0; k < 3; k++)
-          if (i !== j && j !== k && i !== k)
-            perms.add(digits[i]+digits[j]+digits[k]);
-    reversedNumbers = Array.from(perms);
+    reversedNumbers = get3DigitPermutations(number).filter(n => n !== number);
   }
 
   const rows = document.querySelectorAll("#lottery-table tr");
@@ -55,6 +49,25 @@ function reverseRow(btn){
     }
   }
 }
+
+function get3DigitPermutations(number) {
+  const results = [];
+  const digits = number.split("");
+  for (let i = 0; i < digits.length; i++) {
+    for (let j = 0; j < digits.length; j++) {
+      for (let k = 0; k < digits.length; k++) {
+        if (i !== j && j !== k && i !== k) {
+          const perm = digits[i] + digits[j] + digits[k];
+          if (!results.includes(perm)) {
+            results.push(perm);
+          }
+        }
+      }
+    }
+  }
+  return results;
+}
+
 
 document.getElementById("lottery-form").onsubmit = function(e){
   e.preventDefault();

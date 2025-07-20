@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>คีย์หวย V11 (Reset ได้)</title>
+  <title>คีย์หวย V12 (มีเวลา)</title>
   <link rel="stylesheet" href="style.css" />
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
@@ -12,7 +12,7 @@
 <body>
 
 <div id="app-page">
-  <h2>คีย์หวย (V11 - ไม่มีล็อกอิน + รีเซตยอดได้)</h2>
+  <h2>คีย์หวย (V12 - พร้อมเวลา)</h2>
   <button onclick="clearInput()">Clear Input</button>
   <button onclick="resetAll()">🗑️ รีเซตยอดทั้งหมด</button>
 
@@ -28,6 +28,8 @@
     </table>
     <button type="submit">บันทึกทั้งหมด</button>
   </form>
+
+  <h4 id="last-time"></h4>
 
   <h3>สรุปยอดเลขรวม (เลข 2 ตัว)</h3>
   <div id="summary2"></div>

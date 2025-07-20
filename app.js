@@ -43,39 +43,6 @@ function clearInput(){
   });
 }
 
-function resetAll(){
-  if(confirm("คุณแน่ใจหรือไม่ว่าต้องการล้างข้อมูลทั้งหมด?")){
-    localStorage.removeItem("lottery_cumulative");
-    localStorage.removeItem("lottery_history");
-    location.reload();
-  }
-}
-
-function reverseRow(btn){
-  const row = btn.parentElement.parentElement;
-  const numberInput = row.querySelector(".number");
-  if(numberInput.value.length === 2){
-    numberInput.value = numberInput.value.split("").reverse().join("");
-  }
-}
-
-function reverse6Way(btn){
-  const row = btn.parentElement.parentElement;
-  const numberInput = row.querySelector(".number");
-  const val = numberInput.value;
-  if(val.length === 3){
-    const perms = [...new Set([
-      val,
-      val[0]+val[2]+val[1],
-      val[1]+val[0]+val[2],
-      val[1]+val[2]+val[0],
-      val[2]+val[0]+val[1],
-      val[2]+val[1]+val[0]
-    ])];
-    alert("6 ประตู: " + perms.join(", "));
-  }
-}
-
 document.getElementById("lottery-form").onsubmit = function(e){
   e.preventDefault();
   saveBill();
@@ -86,16 +53,14 @@ function saveBill(){
   const tops = document.querySelectorAll(".top");
   const bottoms = document.querySelectorAll(".bottom");
   const tods = document.querySelectorAll(".tod");
-  const date = new Date().toLocaleString();
 
   const cumulative = JSON.parse(localStorage.getItem("lottery_cumulative") || "{}");
-  const history = JSON.parse(localStorage.getItem("lottery_history") || "[]");
 
   let total3 = 0;
   let total2 = 0;
 
   for(let i=0;i<numbers.length;i++){
-    const num = numbers[i].value.trim();
+    const num = numbers[i].value;
     const top = parseFloat(tops[i].value)||0;
     const bottom = parseFloat(bottoms[i].value)||0;
     const tod = parseFloat(tods[i].value)||0;
@@ -104,15 +69,8 @@ function saveBill(){
       cumulative[num].top += top;
       cumulative[num].bottom += bottom;
       cumulative[num].tod += tod;
-
-      history.push({num, top, bottom, tod, date});
       total3 += top + tod;
       total2 += bottom;
-
-      numbers[i].value = "";
-      tops[i].value = "";
-      bottoms[i].value = "";
-      tods[i].value = "";
 
       numbers[i].style.backgroundColor = "#ccc";
       tops[i].style.backgroundColor = "#ccc";
@@ -122,7 +80,6 @@ function saveBill(){
   }
 
   localStorage.setItem("lottery_cumulative", JSON.stringify(cumulative));
-  localStorage.setItem("lottery_history", JSON.stringify(history));
   displaySummary(cumulative);
   document.getElementById("total").innerHTML = "ยอดรวม 3 ตัว: " + total3 + " บาท | ยอดรวม 2 ตัว: " + total2 + " บาท";
   renderChart(cumulative);
@@ -134,7 +91,7 @@ function displaySummary(data){
 
   const entries = Object.entries(data).sort((a,b)=>{
     if(a[0].length !== b[0].length) return a[0].length - b[0].length;
-    return parseInt(a[0]) - parseInt(b[0]);
+    return a[0].localeCompare(b[0]);
   });
 
   for(const [num,amt] of entries){
@@ -159,26 +116,24 @@ function loadSummary(){
 }
 
 function exportExcel(){
-  const data = JSON.parse(localStorage.getItem("lottery_history")||"[]");
-  const ws = XLSX.utils.json_to_sheet(data);
+  const data = JSON.parse(localStorage.getItem("lottery_cumulative")||"{}");
+  const ws = XLSX.utils.json_to_sheet(Object.keys(data).map(k=>({เลข:k,บน:data[k].top,ล่าง:data[k].bottom,โต๊ด:data[k].tod})));
   const wb = XLSX.utils.book_new();
-  XLSX.utils.book_append_sheet(wb, ws, "History");
-  XLSX.writeFile(wb, "lottery_history.xlsx");
+  XLSX.utils.book_append_sheet(wb, ws, "Summary");
+  XLSX.writeFile(wb, "lottery_summary.xlsx");
 }
 
 function exportCSV(){
-  const data = JSON.parse(localStorage.getItem("lottery_history")||"[]");
-  let csv = "เลข,บน,ล่าง,โต๊ด,วันเวลา
-";
-  for(const row of data){
-    csv += `${row.num},${row.top},${row.bottom},${row.tod},${row.date}
-`;
+  const data = JSON.parse(localStorage.getItem("lottery_cumulative")||"{}");
+  let csv = "เลข,บน,ล่าง,โต๊ด\n";
+  for(const [num,amt] of Object.entries(data)){
+    csv += `${num},${amt.top},${amt.bottom},${amt.tod}\n`;
   }
   const blob = new Blob([csv], {type:"text/csv;charset=utf-8;"});
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
   a.href = url;
-  a.download = "lottery_history.csv";
+  a.download = "lottery_summary.csv";
   a.click();
 }
 

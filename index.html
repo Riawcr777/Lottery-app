@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>คีย์หวย FINAL V6</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <h2>คีย์หวย (FINAL V6)</h2>
+  <input type="date" id="date" required>
+  <form id="lottery-form">
+    <table id="lottery-table">
+      <tr><th>เลข</th><th>บน(3ตัวตรง)</th><th>ล่าง</th><th>โต๊ด</th><th>กลับเลข</th></tr>
+      <!-- Static 10 rows -->
+<tr><td><input type='text' class='number' maxlength='3'></td><td><input type='number' class='top'></td><td><input type='number' class='bottom'></td><td><input type='number' class='tod'></td><td><button type='button' onclick='reverseRow(this)'>กลับเลข</button></td></tr>
+<tr><td><input type='text' class='number' maxlength='3'></td><td><input type='number' class='top'></td><td><input type='number' class='bottom'></td><td><input type='number' class='tod'></td><td><button type='button' onclick='reverseRow(this)'>กลับเลข</button></td></tr>
+<tr><td><input type='text' class='number' maxlength='3'></td><td><input type='number' class='top'></td><td><input type='number' class='bottom'></td><td><input type='number' class='tod'></td><td><button type='button' onclick='reverseRow(this)'>กลับเลข</button></td></tr>
+<tr><td><input type='text' class='number' maxlength='3'></td><td><input type='number' class='top'></td><td><input type='number' class='bottom'></td><td><input type='number' class='tod'></td><td><button type='button' onclick='reverseRow(this)'>กลับเลข</button></td></tr>
+<tr><td><input type='text' class='number' maxlength='3'></td><td><input type='number' class='top'></td><td><input type='number' class='bottom'></td><td><input type='number' class='tod'></td><td><button type='button' onclick='reverseRow(this)'>กลับเลข</button></td></tr>
+<tr><td><input type='text' class='number' maxlength='3'></td><td><input type='number' class='top'></td><td><input type='number' class='bottom'></td><td><input type='number' class='tod'></td><td><button type='button' onclick='reverseRow(this)'>กลับเลข</button></td></tr>
+<tr><td><input type='text' class='number' maxlength='3'></td><td><input type='number' class='top'></td><td><input type='number' class='bottom'></td><td><input type='number' class='tod'></td><td><button type='button' onclick='reverseRow(this)'>กลับเลข</button></td></tr>
+<tr><td><input type='text' class='number' maxlength='3'></td><td><input type='number' class='top'></td><td><input type='number' class='bottom'></td><td><input type='number' class='tod'></td><td><button type='button' onclick='reverseRow(this)'>กลับเลข</button></td></tr>
+<tr><td><input type='text' class='number' maxlength='3'></td><td><input type='number' class='top'></td><td><input type='number' class='bottom'></td><td><input type='number' class='tod'></td><td><button type='button' onclick='reverseRow(this)'>กลับเลข</button></td></tr>
+<tr><td><input type='text' class='number' maxlength='3'></td><td><input type='number' class='top'></td><td><input type='number' class='bottom'></td><td><input type='number' class='tod'></td><td><button type='button' onclick='reverseRow(this)'>กลับเลข</button></td></tr>
+    </table>
+    <button type="submit">บันทึกทั้งหมด</button>
+    <button type="button" onclick="cutBill()">ตัดบิล</button>
+    <button type="button" onclick="startVoice()">🎤 สั่งงานด้วยเสียง</button>
+    <button type="button" onclick="resetAll()">🔄 รีเซตทั้งหมด</button>
+  </form>
+
+  <h3>สรุปเลข 2 ตัว</h3>
+  <div id="summary2"></div>
+
+  <h3>สรุปเลข 3 ตัว</h3>
+  <div id="summary3"></div>
+
+  <h3>ยอดรวมทั้งหมด</h3>
+  <div id="total"></div>
+
+  <h3>กราฟรวมยอด</h3>
+  <canvas id="summaryChart" width="400" height="200"></canvas>
+
+  <h3>ประวัติรอบก่อนหน้า</h3>
+  <div id="history"></div>
+
+  <button onclick="exportExcel()">📤 ส่งออก Excel</button>
+  <button onclick="exportCSV()">📤 ส่งออก CSV</button>
+
+  <script src="app.js"></script>
+</body>
+</html>

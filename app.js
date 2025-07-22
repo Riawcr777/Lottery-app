@@ -16,6 +16,7 @@ for (let i = 0; i < 10; i++) {
   cell5.innerHTML = "<button type='button' onclick='reverseRow(this)'>กลับเลข</button>";
 }
 
+
 function reverseRow(btn){
   const row = btn.parentElement.parentElement;
   const numberInput = row.querySelector(".number");
@@ -66,6 +67,7 @@ function get3DigitPermutations(number) {
   }
   return results;
 }
+
 
 document.getElementById("lottery-form").onsubmit = function(e){
   e.preventDefault();
@@ -149,6 +151,7 @@ function cutBill(){
   const history = JSON.parse(localStorage.getItem("lottery_history")||"[]");
   history.push({date: new Date().toLocaleString(), data: summary});
   localStorage.setItem("lottery_history", JSON.stringify(history));
+  // localStorage.removeItem("lottery_summary");
   document.getElementById("summary2").innerHTML = "";
   document.getElementById("summary3").innerHTML = "";
   document.getElementById("total").innerHTML = "";
@@ -177,49 +180,25 @@ function resetAll(){
 
 function exportExcel(){
   const data = JSON.parse(localStorage.getItem("lottery_summary")||"{}");
-  const now = new Date().toLocaleString();
-
-  const sorted = Object.entries(data).sort((a,b)=>{
-    if(a[0].length !== b[0].length) return a[0].length - b[0].length;
-    return parseInt(a[0]) - parseInt(b[0]);
-  });
-
-  const rows = sorted.map(([k,v]) => ({
-    เลข: k,
-    บน: v.top,
-    ล่าง: v.bottom,
-    โต๊ด: v.tod,
-    "บันทึกเมื่อ": now
-  }));
-
-  const ws = XLSX.utils.json_to_sheet(rows);
+  const now = new Date().toLocaleString().replace(/[/,: ]/g,"_");
+  const ws = XLSX.utils.json_to_sheet(Object.keys(data).map(k=>({เลข:k,บน:data[k].top,ล่าง:data[k].bottom,โต๊ด:data[k].tod})));
   const wb = XLSX.utils.book_new();
   XLSX.utils.book_append_sheet(wb, ws, "Summary");
-  const fileName = `lottery_summary_${now.replace(/[/,: ]/g,"_")}.xlsx`;
-  XLSX.writeFile(wb, fileName);
+  XLSX.writeFile(wb, `lottery_summary_${now}.xlsx`);
 }
 
 function exportCSV(){
   const data = JSON.parse(localStorage.getItem("lottery_summary")||"{}");
-  const now = new Date().toLocaleString();
-
-  const sorted = Object.entries(data).sort((a,b)=>{
-    if(a[0].length !== b[0].length) return a[0].length - b[0].length;
-    return parseInt(a[0]) - parseInt(b[0]);
-  });
-
-  let csv = "เลข,บน,ล่าง,โต๊ด,บันทึกเมื่อ
-";
-  for(const [num,amt] of sorted){
-    csv += `${num},${amt.top},${amt.bottom},${amt.tod},${now}
-`;
+  const now = new Date().toLocaleString().replace(/[/,: ]/g,"_");
+  let csv = "เลข,บน,ล่าง,โต๊ด\n";
+  for(const [num,amt] of Object.entries(data)){
+    csv += `${num},${amt.top},${amt.bottom},${amt.tod}\n`;
   }
-
   const blob = new Blob([csv], {type:"text/csv;charset=utf-8;"});
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
   a.href = url;
-  a.download = `lottery_summary_${now.replace(/[/,: ]/g,"_")}.csv`;
+  a.download = `lottery_summary_${now}.csv`;
   a.click();
 }
 
